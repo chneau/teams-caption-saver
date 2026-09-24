@@ -200,6 +200,13 @@ async function checkFolderStatus(): Promise<void> {
 	const statusText = document.getElementById("folder-status-text");
 	if (!banner || !statusText) return;
 
+	const settings = await getSettings();
+	if (!settings.autoSaveDirectory) {
+		banner.style.display = "none";
+		return;
+	}
+	banner.style.display = "flex";
+
 	chrome.runtime.sendMessage(
 		{ action: "check_directory_handle" },
 		(response) => {
@@ -253,6 +260,13 @@ async function init(): Promise<void> {
 			message.action === "finalize_live_meeting"
 		) {
 			refreshData();
+		}
+	});
+
+	// Listen for settings changes (e.g. toggling direct folder writing)
+	chrome.storage.onChanged.addListener((changes, areaName) => {
+		if (areaName === "sync" && changes.autoSaveDirectory) {
+			checkFolderStatus();
 		}
 	});
 
