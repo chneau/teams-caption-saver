@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Teams Caption Saver - Settings</title>
+		<link rel="stylesheet" href="options.css" />
+	</head>
+	<body>
+		<div class="container">
+			<header class="header">
+				<img src="../../public/icon.png" class="icon" alt="Icon" />
+				<h1>Teams Caption Saver Settings</h1>
+			</header>
+
+			<!-- Folder Sync Section -->
+			<section class="card">
+				<h2>Local Output Folder (Direct to Disk)</h2>
+				<p class="desc">
+					Transcripts can be automatically saved directly to a folder on your computer in real-time using the File System Access API without triggering browser download prompts.
+				</p>
+
+				<div class="folder-status-box">
+					<span class="label">Current Folder:</span>
+					<span id="folder-name" class="folder-val">No folder chosen</span>
+				</div>
+
+				<div class="btn-group">
+					<button type="button" id="btn-pick-folder"
+						class="btn primary">Choose Folder</button>
+					<button type="button" id="btn-regrant" class="btn"
+						hidden>Re-grant Permission</button>
+					<button type="button" id="btn-clear-folder" class="btn danger"
+						hidden>Disconnect Folder</button>
+				</div>
+
+				<div class="setting-item" style="margin-top: 16px;">
+					<label class="toggle-row">
+						<input type="checkbox" id="auto-save-directory" checked />
+						<span>Enable real-time direct folder writing</span>
+					</label>
+				</div>
+
+				<div class="setting-item">
+					<label for="subfolder-pattern"
+						class="label">Folder Organization Structure:</label>
+					<select id="subfolder-pattern" class="select-input">
+						<option value="none">Flat (all files in root folder)</option>
+						<option value="date">Group by Date (YYYY-MM-DD)</option>
+						<option value="meeting">Group by Meeting Title</option>
+					</select>
+				</div>
+			</section>
+
+			<!-- General Automation & Downloads Section -->
+			<section class="card">
+				<h2>Automation & Downloads</h2>
+				<div class="setting-item">
+					<label class="toggle-row">
+						<input type="checkbox" id="auto-enable-captions" checked />
+						<span>Auto-turn on live captions when joining a meeting</span>
+					</label>
+				</div>
+
+				<div class="setting-item">
+					<label class="toggle-row">
+						<input type="checkbox" id="auto-save-downloads" />
+						<span>Also download a copy via browser downloads when meeting ends</span>
+					</label>
+				</div>
+
+				<div class="setting-item">
+					<span class="label">Default Saved Formats:</span>
+					<div class="checkbox-group">
+						<label><input type="checkbox" name="format" value="md" checked /> Markdown (.md)</label>
+						<label><input type="checkbox" name="format" value="txt" checked /> Plain Text (.txt)</label>
+						<label><input type="checkbox" name="format" value="vtt" /> WebVTT (.vtt)</label>
+						<label><input type="checkbox" name="format" value="jsonl" /> JSON Lines (.jsonl)</label>
+						<label><input type="checkbox" name="format" value="json" /> Full JSON (.json)</label>
+						<label><input type="checkbox" name="format" value="csv" /> CSV (.csv)</label>
+					</div>
+				</div>
+			</section>
+
+			<!-- Microsoft Stream & SharePoint Tenants -->
+			<section class="card">
+				<h2>Stream & SharePoint Recording Tenants</h2>
+				<p class="desc">
+					To capture transcripts when watching recorded meetings in Microsoft Stream or SharePoint, add your organization's tenant origin (e.g. <code>https://mycompany.sharepoint.com</code>).
+				</p>
+
+				<div class="tenant-input-row">
+					<input type="text" id="tenant-input"
+						placeholder="https://organization.sharepoint.com" />
+					<button type="button" id="btn-add-tenant"
+						class="btn primary">Add Origin</button>
+				</div>
+				<div id="tenant-error" class="input-error" hidden></div>
+
+				<ul id="tenant-list" class="tenant-list">
+					<li class="empty-muted">No custom origins registered.</li>
+				</ul>
+			</section>
+		</div>
+
+		<!-- Toast Notification -->
+		<div id="toast" class="toast" hidden></div>
+
+		<script type="module" src="options.js"></script>
+	</body>
+</html>

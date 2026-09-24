@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Teams Captions Saver</title>
+		<link rel="stylesheet" href="popup.css" />
+	</head>
+	<body>
+		<div class="header">
+			<div class="logo-title">
+				<img src="../../public/icon.png" class="icon" alt="Icon" />
+				<h2>Teams Caption Saver</h2>
+			</div>
+			<div class="header-actions">
+				<button type="button" id="btn-open-viewer" class="btn primary"
+					title="Open Real-time Viewer Tab">Live Viewer</button>
+				<button type="button" id="btn-open-options" class="btn icon-btn"
+					title="Settings">⚙️</button>
+			</div>
+		</div>
+
+		<!-- Top Active Live Recording Banner -->
+		<div id="live-recording-banner" class="live-banner">
+			<div class="live-banner-content">
+				<span class="pulse-dot"></span>
+				<span id="live-banner-text"></span>
+			</div>
+			<button type="button" id="btn-live-banner-view"
+				class="btn small primary">Open Live</button>
+		</div>
+
+		<div id="folder-banner" class="folder-banner">
+			<span id="folder-status-text">Checking folder sync...</span>
+			<button type="button" id="btn-pick-folder"
+				class="btn small">Set Folder</button>
+		</div>
+
+		<div class="history-section">
+			<div class="search-bar">
+				<input type="text" id="search-input"
+					placeholder="Search meetings (Press / to search)..." />
+				<button type="button" id="btn-clear-all" class="btn small"
+					title="Clear all meeting records">Clear All</button>
+			</div>
+			<div id="search-match-count" class="match-count"></div>
+
+			<div id="meeting-list" class="meeting-list">
+				<div class="empty-state">No meetings recorded yet.</div>
+			</div>
+		</div>
+
+		<!-- Toast Notification -->
+		<div id="toast" class="toast"></div>
+
+		<script type="module" src="popup.js"></script>
+	</body>
+</html>

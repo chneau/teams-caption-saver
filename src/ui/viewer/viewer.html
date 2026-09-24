@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Teams Captions Viewer</title>
+		<link rel="stylesheet" href="viewer.css" />
+	</head>
+	<body>
+		<div class="app-layout">
+			<!-- Main Content Area -->
+			<main class="main-content">
+				<header class="viewer-header">
+					<div class="meeting-info">
+						<div class="title-row">
+							<h1 id="meeting-title">Connecting to Meeting...</h1>
+							<span id="meeting-status" class="badge live">LIVE</span>
+						</div>
+						<div class="meta-row">
+							<span id="meeting-time">📅 Waiting for captions...</span>
+							<span id="caption-count">💬 0 lines</span>
+							<span id="folder-sync-status"
+								class="sync-pill">📁 Folder sync checking...</span>
+						</div>
+					</div>
+
+					<div class="controls-row">
+						<div class="search-box">
+							<input type="text" id="filter-input"
+								placeholder="Filter captions (Press / to search, Esc to clear)..." />
+							<span id="search-match-count" class="match-count"></span>
+						</div>
+						<div class="controls-actions">
+							<button type="button" id="btn-header-copy"
+								class="btn primary small"
+								title="Copy full transcript as Markdown to clipboard">
+								📋 Copy All
+							</button>
+							<label class="toggle-label">
+								<input type="checkbox" id="autoscroll-toggle" checked />
+								<span>Auto-scroll</span>
+							</label>
+						</div>
+					</div>
+				</header>
+
+				<section id="captions-container" class="captions-container">
+					<div id="empty-state-view" class="empty-notice">
+						<h3>No Active Captions Stream</h3>
+						<p>Open Microsoft Teams on the web with live captions enabled to view and capture speech in real time.</p>
+						<div class="tip-card">
+							<strong>💡 Watching a Stream / SharePoint recording?</strong>
+							<p>Play the video with closed captions toggled on in the video player once to extract the full transcript.</p>
+						</div>
+					</div>
+				</section>
+
+				<button type="button" id="jump-to-live" class="jump-to-live" hidden>
+					↓ Jump to Live <span id="unread-count" class="unread-pill">0</span>
+				</button>
+			</main>
+
+			<!-- Sidebar: Collapsible Sections -->
+			<aside class="sidebar">
+				<details open class="sidebar-section">
+					<summary class="section-title">
+						<span>Export & Copy</span>
+					</summary>
+					<div class="section-body">
+						<button type="button" id="btn-sidebar-copy" class="btn primary"
+							style="width: 100%; margin-bottom: 8px;">
+							📋 Copy to Clipboard (Markdown)
+						</button>
+						<div class="export-buttons">
+							<button type="button" class="btn small"
+								data-format="txt">Download TXT</button>
+							<button type="button" class="btn small"
+								data-format="md">Download MD</button>
+							<button type="button" class="btn small"
+								data-format="vtt">Download VTT</button>
+							<button type="button" class="btn small"
+								data-format="json">Download JSON</button>
+							<button type="button" class="btn small"
+								data-format="jsonl">Download JSONL</button>
+							<button type="button" class="btn small"
+								data-format="csv">Download CSV</button>
+						</div>
+					</div>
+				</details>
+
+				<details open class="sidebar-section">
+					<summary class="section-title">
+						<span>Attendees</span>
+						<span id="attendee-count" class="badge-pill">0</span>
+					</summary>
+					<div class="section-body">
+						<div id="attendees-list" class="attendees-list">
+							<div class="empty-muted">No attendees recorded.</div>
+						</div>
+					</div>
+				</details>
+
+				<details open class="sidebar-section">
+					<summary class="section-title">
+						<span>Speaker Aliases</span>
+						<span id="alias-count" class="badge-pill">0</span>
+					</summary>
+					<div class="section-body">
+						<p
+							class="section-help">Tip: Click any speaker name in the conversation to rename them instantly.</p>
+						<div class="alias-inputs">
+							<input type="text" id="alias-original"
+								placeholder="Original name" />
+							<input type="text" id="alias-replacement"
+								placeholder="New alias" />
+							<button type="button" id="btn-add-alias"
+								class="btn small primary">Set Alias</button>
+						</div>
+						<div id="alias-list" class="alias-list"></div>
+					</div>
+				</details>
+			</aside>
+		</div>
+
+		<!-- Toast Notification -->
+		<div id="toast" class="toast"></div>
+
+		<script type="module" src="viewer.js"></script>
+	</body>
+</html>

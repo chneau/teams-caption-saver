@@ -1,0 +1,45 @@
+{
+	"manifest_version": 3,
+	"name": "Teams Live Captions & Recording Saver",
+	"version": "5.0.0",
+	"description": "Unified live captions capture and Stream/SharePoint recording transcript saver with direct-to-folder and in-browser history.",
+	"icons": {
+		"16": "icon.png",
+		"48": "icon.png",
+		"128": "icon.png"
+	},
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "teams-caption-saver@chneau",
+			"strict_min_version": "109.0"
+		}
+	},
+	"permissions": ["storage", "downloads", "activeTab", "scripting"],
+	"host_permissions": [
+		"https://teams.microsoft.com/*",
+		"https://teams.cloud.microsoft/*",
+		"https://teams.live.com/*"
+	],
+	"action": {
+		"default_icon": "icon.png",
+		"default_popup": "ui/popup/popup.html",
+		"default_title": "Teams Caption Saver"
+	},
+	"options_ui": {
+		"page": "ui/options/options.html",
+		"open_in_tab": true
+	},
+	"background": {
+		"service_worker": "background/service_worker.js"
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"https://teams.microsoft.com/*",
+				"https://teams.cloud.microsoft/*",
+				"https://teams.live.com/*"
+			],
+			"js": ["content/content_script.js"]
+		}
+	]
+}

@@ -1,0 +1,26 @@
+{
+	"name": "teams-caption-saver-ts",
+	"version": "5.0.0",
+	"description": "Unified TypeScript Microsoft Teams Live Captions & Stream/SharePoint Recording Saver",
+	"scripts": {
+		"build": "bun run scripts/build.ts",
+		"typecheck": "tsc --noEmit",
+		"check": "bun run --sequential --no-exit-on-error check:clean check:deno check:oxlint check:biome check:export lint",
+		"upgrade": "bun update --latest",
+		"check:clean": "rm -rf dist out build",
+		"check:deno": "deno fmt --use-tabs --quiet",
+		"check:oxlint": "oxlint --fix-dangerously --fix-suggestions --fix --quiet",
+		"check:biome": "timeout 3s biome check --write --unsafe --vcs-enabled=true --vcs-client-kind=git --vcs-use-ignore-file=true .",
+		"check:export": "ts-unused-exports tsconfig.json",
+		"lint": "tsc --noEmit",
+		"all": "bun run --sequential --no-exit-on-error upgrade check"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.4.2",
+		"@types/chrome": "^0.3.0",
+		"@types/wicg-file-system-access": "^2023.10.7",
+		"crx3": "^2.0.0",
+		"jszip": "^3.10.2",
+		"typescript": "^7.0.2"
+	}
+}
