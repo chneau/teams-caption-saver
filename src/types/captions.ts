@@ -61,9 +61,9 @@ export interface ExtensionSettings {
 
 export const DEFAULT_SETTINGS: ExtensionSettings = {
 	autoEnableCaptions: true,
-	autoSaveDownloads: false,
-	autoSaveDirectory: true,
-	defaultFormats: ["md", "txt"],
+	autoSaveDownloads: true,
+	autoSaveDirectory: false,
+	defaultFormats: ["md"],
 	aliases: {},
 	grantedTenants: [],
 	subfolderPattern: "none",
