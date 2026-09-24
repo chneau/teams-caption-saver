@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "Teams Live Captions & Recording Saver",
-	"version": "5.0.0",
+	"version": "5.1.0",
 	"description": "Unified live captions capture and Stream/SharePoint recording transcript saver with direct-to-folder and in-browser history.",
 	"icons": {
 		"16": "icon.png",

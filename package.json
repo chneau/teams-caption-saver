@@ -1,6 +1,6 @@
 {
 	"name": "teams-caption-saver-ts",
-	"version": "5.0.0",
+	"version": "5.1.0",
 	"description": "Unified TypeScript Microsoft Teams Live Captions & Stream/SharePoint Recording Saver",
 	"scripts": {
 		"build": "bun run scripts/build.ts",

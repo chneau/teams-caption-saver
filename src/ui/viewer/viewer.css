@@ -1,4 +1,5 @@
 :root {
+	color-scheme: light dark;
 	--primary: #5c5fc8;
 	--primary-hover: #4b4da3;
 	--bg: #f8f9fa;
@@ -8,6 +9,68 @@
 	--muted: #64748b;
 	--bubble-bg: #f1f5f9;
 	--highlight: #fef08a;
+	--highlight-text: #854d0e;
+	--btn-bg: #ffffff;
+	--btn-hover: #f1f5f9;
+	--sync-pill-bg: #eef2ff;
+	--sync-pill-text: #3730a3;
+	--avatar-bg: #e2e8f0;
+	--avatar-text: #475569;
+	--avatar-hover-bg: #c7d2fe;
+	--avatar-hover-text: #3730a3;
+	--badge-live-bg: #fee2e2;
+	--badge-live-text: #b91c1c;
+	--badge-live-border: #fecaca;
+	--badge-complete-bg: #dcfce7;
+	--badge-complete-text: #15803d;
+	--badge-history-bg: #e0e7ff;
+	--badge-history-text: #3730a3;
+	--danger: #b91c1c;
+	--danger-bg: #fee2e2;
+	--danger-border: #fecaca;
+	--tip-bg: #f0fdf4;
+	--tip-border: #bbf7d0;
+	--tip-text: #166534;
+	--toast-bg: #1e293b;
+	--toast-text: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--primary: #7c7ff6;
+		--primary-hover: #686bf0;
+		--bg: #0f172a;
+		--surface: #1e293b;
+		--border: #334155;
+		--text: #f1f5f9;
+		--muted: #94a3b8;
+		--bubble-bg: #334155;
+		--highlight: #854d0e;
+		--highlight-text: #fef08a;
+		--btn-bg: #1e293b;
+		--btn-hover: #334155;
+		--sync-pill-bg: #1e1b4b;
+		--sync-pill-text: #c7d2fe;
+		--avatar-bg: #334155;
+		--avatar-text: #cbd5e1;
+		--avatar-hover-bg: #4338ca;
+		--avatar-hover-text: #e0e7ff;
+		--badge-live-bg: #450a0a;
+		--badge-live-text: #fca5a5;
+		--badge-live-border: #7f1d1d;
+		--badge-complete-bg: #052e16;
+		--badge-complete-text: #86efac;
+		--badge-history-bg: #1e1b4b;
+		--badge-history-text: #c7d2fe;
+		--danger: #ef4444;
+		--danger-bg: #450a0a;
+		--danger-border: #7f1d1d;
+		--tip-bg: #052e16;
+		--tip-border: #166534;
+		--tip-text: #86efac;
+		--toast-bg: #334155;
+		--toast-text: #f8fafc;
+	}
 }
 
 * {
@@ -49,7 +112,7 @@ body {
 
 .viewer-header {
 	padding: 16px 24px;
-	background: white;
+	background: var(--surface);
 	border-bottom: 1px solid var(--border);
 	display: flex;
 	flex-direction: column;
@@ -76,8 +139,8 @@ body {
 }
 
 .sync-pill {
-	background: #eef2ff;
-	color: #3730a3;
+	background: var(--sync-pill-bg);
+	color: var(--sync-pill-text);
 	padding: 2px 8px;
 	border-radius: 12px;
 	font-size: 11px;
@@ -110,6 +173,8 @@ body {
 	padding: 8px 12px;
 	border-radius: 6px;
 	border: 1px solid var(--border);
+	background: var(--bg);
+	color: var(--text);
 	font-size: 13px;
 	outline: none;
 }
@@ -144,19 +209,20 @@ body {
 }
 
 .badge.live {
-	background: #fee2e2;
-	color: #b91c1c;
+	background: var(--badge-live-bg);
+	color: var(--badge-live-text);
+	border: 1px solid var(--badge-live-border);
 	animation: pulse 2s infinite;
 }
 
 .badge.complete {
-	background: #dcfce7;
-	color: #15803d;
+	background: var(--badge-complete-bg);
+	color: var(--badge-complete-text);
 }
 
 .badge.history {
-	background: #e0e7ff;
-	color: #3730a3;
+	background: var(--badge-history-bg);
+	color: var(--badge-history-text);
 }
 
 @keyframes pulse {
@@ -191,8 +257,8 @@ body {
 	width: 36px;
 	height: 36px;
 	border-radius: 50%;
-	background: #e2e8f0;
-	color: #475569;
+	background: var(--avatar-bg);
+	color: var(--avatar-text);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -206,8 +272,8 @@ body {
 
 .avatar:hover {
 	transform: scale(1.05);
-	background: #c7d2fe;
-	color: #3730a3;
+	background: var(--avatar-hover-bg);
+	color: var(--avatar-hover-text);
 }
 
 .caption-body {
@@ -227,7 +293,7 @@ body {
 .speaker-name {
 	font-size: 13px;
 	font-weight: 600;
-	color: #334155;
+	color: var(--text);
 	cursor: pointer;
 	display: inline-flex;
 	align-items: center;
@@ -238,7 +304,7 @@ body {
 }
 
 .speaker-name:hover {
-	background: #e2e8f0;
+	background: var(--border);
 	color: var(--primary);
 }
 
@@ -256,7 +322,7 @@ body {
 
 mark {
 	background: var(--highlight);
-	color: #854d0e;
+	color: var(--highlight-text);
 	padding: 1px 3px;
 	border-radius: 2px;
 	font-weight: 600;
@@ -275,7 +341,7 @@ mark {
 	font-size: 13px;
 	font-weight: 600;
 	cursor: pointer;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 	display: flex;
 	align-items: center;
 	gap: 8px;
@@ -323,7 +389,7 @@ summary.section-title {
 }
 
 summary.section-title:hover {
-	background: #f8fafc;
+	background: var(--bubble-bg);
 }
 
 .section-body {
@@ -334,8 +400,8 @@ summary.section-title:hover {
 }
 
 .badge-pill {
-	background: #e2e8f0;
-	color: #475569;
+	background: var(--bubble-bg);
+	color: var(--muted);
 	font-size: 11px;
 	padding: 1px 6px;
 	border-radius: 10px;
@@ -359,14 +425,14 @@ summary.section-title:hover {
 	font-weight: 500;
 	border-radius: 6px;
 	border: 1px solid var(--border);
-	background: white;
+	background: var(--btn-bg);
 	color: var(--text);
 	cursor: pointer;
 	transition: all 0.15s ease;
 }
 
 .btn:hover {
-	background: #f1f5f9;
+	background: var(--btn-hover);
 }
 
 .btn.primary {
@@ -380,12 +446,12 @@ summary.section-title:hover {
 }
 
 .btn.danger {
-	color: #b91c1c;
-	border-color: #fecaca;
+	color: var(--danger);
+	border-color: var(--danger-border);
 }
 
 .btn.danger:hover {
-	background: #fee2e2;
+	background: var(--danger-bg);
 }
 
 .btn.small {
@@ -426,6 +492,8 @@ summary.section-title:hover {
 .alias-inputs input {
 	padding: 6px 10px;
 	font-size: 12px;
+	background: var(--bg);
+	color: var(--text);
 	border: 1px solid var(--border);
 	border-radius: 4px;
 }
@@ -442,7 +510,7 @@ summary.section-title:hover {
 	justify-content: space-between;
 	align-items: center;
 	padding: 4px 6px;
-	background: #f8fafc;
+	background: var(--bubble-bg);
 	border-radius: 4px;
 }
 
@@ -456,7 +524,7 @@ summary.section-title:hover {
 
 .empty-notice h3 {
 	font-size: 16px;
-	color: #334155;
+	color: var(--text);
 	margin-bottom: 8px;
 }
 
@@ -470,10 +538,10 @@ summary.section-title:hover {
 .tip-card {
 	margin-top: 20px;
 	padding: 12px 16px;
-	background: #f0fdf4;
-	border: 1px solid #bbf7d0;
+	background: var(--tip-bg);
+	border: 1px solid var(--tip-border);
 	border-radius: 6px;
-	color: #166534;
+	color: var(--tip-text);
 	font-size: 12px;
 	max-width: 440px;
 	margin-left: auto;
@@ -491,12 +559,12 @@ summary.section-title:hover {
 	position: fixed;
 	bottom: 24px;
 	right: 24px;
-	background: #1e293b;
-	color: white;
+	background: var(--toast-bg);
+	color: var(--toast-text);
 	padding: 10px 18px;
 	border-radius: 8px;
 	font-size: 13px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 	z-index: 1000;
 	align-items: center;
 	gap: 8px;

@@ -1,4 +1,5 @@
 :root {
+	color-scheme: light dark;
 	--primary: #5c5fc8;
 	--primary-hover: #4b4da3;
 	--bg: #f8f9fa;
@@ -6,7 +7,36 @@
 	--border: #e2e8f0;
 	--text: #1e293b;
 	--muted: #64748b;
+	--box-bg: #f1f5f9;
+	--btn-bg: #ffffff;
+	--btn-hover: #f1f5f9;
 	--danger: #dc2626;
+	--danger-hover: #b91c1c;
+	--danger-bg: #fee2e2;
+	--danger-border: #fecaca;
+	--toast-bg: #1e293b;
+	--toast-text: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--primary: #7c7ff6;
+		--primary-hover: #686bf0;
+		--bg: #0f172a;
+		--surface: #1e293b;
+		--border: #334155;
+		--text: #f1f5f9;
+		--muted: #94a3b8;
+		--box-bg: #0f172a;
+		--btn-bg: #1e293b;
+		--btn-hover: #334155;
+		--danger: #ef4444;
+		--danger-hover: #dc2626;
+		--danger-bg: #450a0a;
+		--danger-border: #7f1d1d;
+		--toast-bg: #334155;
+		--toast-text: #f8fafc;
+	}
 }
 
 * {
@@ -76,7 +106,8 @@ body {
 
 .folder-status-box {
 	padding: 12px 16px;
-	background: #f1f5f9;
+	background: var(--box-bg);
+	border: 1px solid var(--border);
 	border-radius: 6px;
 	display: flex;
 	align-items: center;
@@ -90,7 +121,7 @@ body {
 }
 
 .folder-val {
-	color: #334155;
+	color: var(--text);
 	font-family: monospace;
 }
 
@@ -105,14 +136,14 @@ body {
 	font-weight: 500;
 	border-radius: 6px;
 	border: 1px solid var(--border);
-	background: white;
+	background: var(--btn-bg);
 	color: var(--text);
 	cursor: pointer;
 	transition: all 0.15s ease;
 }
 
 .btn:hover {
-	background: #f1f5f9;
+	background: var(--btn-hover);
 }
 
 .btn.primary {
@@ -127,11 +158,11 @@ body {
 
 .btn.danger {
 	color: var(--danger);
-	border-color: #fecaca;
+	border-color: var(--danger-border);
 }
 
 .btn.danger:hover {
-	background: #fee2e2;
+	background: var(--danger-bg);
 }
 
 .btn.small {
@@ -160,7 +191,8 @@ body {
 	border-radius: 6px;
 	font-size: 13px;
 	outline: none;
-	background: white;
+	background: var(--bg);
+	color: var(--text);
 	max-width: 320px;
 }
 
@@ -187,6 +219,8 @@ body {
 	flex: 1;
 	padding: 8px 12px;
 	border: 1px solid var(--border);
+	background: var(--bg);
+	color: var(--text);
 	border-radius: 6px;
 	font-size: 13px;
 	outline: none;
@@ -194,7 +228,7 @@ body {
 
 .tenant-input-row input.error {
 	border-color: var(--danger);
-	background: #fff5f5;
+	background: var(--danger-bg);
 }
 
 .input-error {
@@ -215,7 +249,7 @@ body {
 	justify-content: space-between;
 	align-items: center;
 	padding: 8px 12px;
-	background: #f8fafc;
+	background: var(--box-bg);
 	border: 1px solid var(--border);
 	border-radius: 6px;
 	font-size: 13px;
@@ -233,12 +267,12 @@ body {
 	position: fixed;
 	bottom: 28px;
 	right: 28px;
-	background: #1e293b;
-	color: white;
+	background: var(--toast-bg);
+	color: var(--toast-text);
 	padding: 10px 18px;
 	border-radius: 8px;
 	font-size: 13px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 	z-index: 1000;
 	align-items: center;
 	gap: 8px;

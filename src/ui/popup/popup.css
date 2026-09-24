@@ -1,15 +1,76 @@
 :root {
+	color-scheme: light dark;
 	--primary: #5c5fc8;
 	--primary-hover: #4b4da3;
 	--bg: #ffffff;
 	--surface: #f8f9fa;
+	--card-bg: #ffffff;
 	--border: #e2e8f0;
 	--text: #1e293b;
 	--muted: #64748b;
 	--danger: #dc2626;
 	--danger-hover: #b91c1c;
+	--danger-bg: #fee2e2;
+	--danger-border: #fecaca;
 	--success: #16a34a;
 	--highlight: #fef08a;
+	--highlight-text: #854d0e;
+	--btn-bg: #ffffff;
+	--btn-hover: #f1f5f9;
+	--snippet-bg: #f8fafc;
+	--snippet-text: #475569;
+	--live-bg: #fef2f2;
+	--live-border: #fecaca;
+	--live-text: #991b1b;
+	--folder-bg: #eef2ff;
+	--folder-border: #c7d2fe;
+	--folder-text: #3730a3;
+	--badge-stream-bg: #e0e7ff;
+	--badge-stream-text: #3730a3;
+	--badge-complete-bg: #dcfce7;
+	--badge-complete-text: #15803d;
+	--toast-bg: #1e293b;
+	--toast-text: #ffffff;
+	--toast-undo-bg: #475569;
+	--toast-undo-text: #38bdf8;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--primary: #7c7ff6;
+		--primary-hover: #686bf0;
+		--bg: #0f172a;
+		--surface: #1e293b;
+		--card-bg: #1e293b;
+		--border: #334155;
+		--text: #f1f5f9;
+		--muted: #94a3b8;
+		--danger: #ef4444;
+		--danger-hover: #dc2626;
+		--danger-bg: #450a0a;
+		--danger-border: #7f1d1d;
+		--success: #22c55e;
+		--highlight: #854d0e;
+		--highlight-text: #fef08a;
+		--btn-bg: #1e293b;
+		--btn-hover: #334155;
+		--snippet-bg: #0f172a;
+		--snippet-text: #cbd5e1;
+		--live-bg: #450a0a;
+		--live-border: #7f1d1d;
+		--live-text: #fca5a5;
+		--folder-bg: #1e1b4b;
+		--folder-border: #312e81;
+		--folder-text: #c7d2fe;
+		--badge-stream-bg: #1e1b4b;
+		--badge-stream-text: #c7d2fe;
+		--badge-complete-bg: #052e16;
+		--badge-complete-text: #86efac;
+		--toast-bg: #334155;
+		--toast-text: #f8fafc;
+		--toast-undo-bg: #0f172a;
+		--toast-undo-text: #38bdf8;
+	}
 }
 
 * {
@@ -72,7 +133,7 @@ body {
 	font-weight: 500;
 	border-radius: 6px;
 	border: 1px solid var(--border);
-	background: white;
+	background: var(--btn-bg);
 	color: var(--text);
 	cursor: pointer;
 	transition: all 0.15s ease;
@@ -82,7 +143,7 @@ body {
 }
 
 .btn:hover {
-	background: #f1f5f9;
+	background: var(--btn-hover);
 }
 
 .btn.primary {
@@ -97,11 +158,11 @@ body {
 
 .btn.danger {
 	color: var(--danger);
-	border-color: #fecaca;
+	border-color: var(--danger-border);
 }
 
 .btn.danger:hover {
-	background: #fee2e2;
+	background: var(--danger-bg);
 }
 
 .btn.small {
@@ -115,13 +176,13 @@ body {
 
 .live-banner {
 	display: none;
-	background: #fef2f2;
-	border-bottom: 1px solid #fecaca;
+	background: var(--live-bg);
+	border-bottom: 1px solid var(--live-border);
 	padding: 8px 16px;
 	justify-content: space-between;
 	align-items: center;
 	font-size: 12px;
-	color: #991b1b;
+	color: var(--live-text);
 }
 
 .live-banner.show {
@@ -137,7 +198,7 @@ body {
 .pulse-dot {
 	width: 8px;
 	height: 8px;
-	background: #dc2626;
+	background: var(--danger);
 	border-radius: 50%;
 	display: inline-block;
 	animation: pulse 1.5s infinite;
@@ -148,10 +209,10 @@ body {
 	justify-content: space-between;
 	align-items: center;
 	padding: 8px 16px;
-	background: #eef2ff;
-	border-bottom: 1px solid #c7d2fe;
+	background: var(--folder-bg);
+	border-bottom: 1px solid var(--folder-border);
 	font-size: 12px;
-	color: #3730a3;
+	color: var(--folder-text);
 	min-height: 38px;
 }
 
@@ -173,6 +234,8 @@ body {
 	flex: 1;
 	padding: 7px 12px;
 	font-size: 12px;
+	background: var(--bg);
+	color: var(--text);
 	border: 1px solid var(--border);
 	border-radius: 6px;
 	outline: none;
@@ -209,7 +272,7 @@ body {
 	border: 1px solid var(--border);
 	border-radius: 6px;
 	padding: 10px 12px;
-	background: white;
+	background: var(--card-bg);
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
@@ -217,8 +280,8 @@ body {
 }
 
 .meeting-card:hover {
-	border-color: #94a3b8;
-	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+	border-color: var(--muted);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .meeting-header {
@@ -237,13 +300,13 @@ body {
 
 .meeting-snippet {
 	font-size: 11px;
-	color: #475569;
+	color: var(--snippet-text);
 	font-style: italic;
 	line-height: 1.3;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	background: #f8fafc;
+	background: var(--snippet-bg);
 	padding: 3px 6px;
 	border-radius: 4px;
 	border-left: 2px solid var(--primary);
@@ -259,19 +322,20 @@ body {
 }
 
 .badge.live {
-	background: #fee2e2;
-	color: #b91c1c;
+	background: var(--live-bg);
+	color: var(--live-text);
+	border: 1px solid var(--live-border);
 	animation: pulse 2s infinite;
 }
 
 .badge.stream {
-	background: #e0e7ff;
-	color: #3730a3;
+	background: var(--badge-stream-bg);
+	color: var(--badge-stream-text);
 }
 
 .badge.complete {
-	background: #dcfce7;
-	color: #15803d;
+	background: var(--badge-complete-bg);
+	color: var(--badge-complete-text);
 }
 
 @keyframes pulse {
@@ -299,7 +363,7 @@ body {
 	align-items: center;
 	margin-top: 4px;
 	padding-top: 8px;
-	border-top: 1px solid #f1f5f9;
+	border-top: 1px solid var(--border);
 }
 
 .export-control {
@@ -313,14 +377,14 @@ body {
 	font-size: 11px;
 	border-radius: 4px;
 	border: 1px solid var(--border);
-	background: white;
-	color: #334155;
+	background: var(--btn-bg);
+	color: var(--text);
 	outline: none;
 }
 
 mark {
 	background: var(--highlight);
-	color: #854d0e;
+	color: var(--highlight-text);
 	padding: 1px 2px;
 	border-radius: 2px;
 	font-weight: 600;
@@ -332,12 +396,12 @@ mark {
 	bottom: 16px;
 	left: 50%;
 	transform: translateX(-50%);
-	background: #1e293b;
-	color: white;
+	background: var(--toast-bg);
+	color: var(--toast-text);
 	padding: 8px 14px;
 	border-radius: 6px;
 	font-size: 12px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 	z-index: 1000;
 	align-items: center;
 	gap: 8px;
@@ -350,9 +414,9 @@ mark {
 }
 
 .toast-undo {
-	background: #475569;
-	color: #38bdf8;
-	border: none;
+	background: var(--toast-undo-bg);
+	color: var(--toast-undo-text);
+	border: 1px solid var(--border);
 	padding: 2px 6px;
 	border-radius: 4px;
 	font-size: 11px;
@@ -362,8 +426,7 @@ mark {
 }
 
 .toast-undo:hover {
-	background: #64748b;
-	color: white;
+	opacity: 0.85;
 }
 
 @keyframes popIn {
