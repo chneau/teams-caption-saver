@@ -149,42 +149,81 @@ import type {
 		};
 	}
 
+	const activeIntervals: ReturnType<typeof setInterval>[] = [];
+
+	function isExtensionValid(): boolean {
+		try {
+			return Boolean(chrome?.runtime?.id);
+		} catch {
+			return false;
+		}
+	}
+
+	function cleanupOrphanedScript(): void {
+		isCapturing = false;
+		for (const id of activeIntervals) {
+			clearInterval(id);
+		}
+		activeIntervals.length = 0;
+		if (captionObserver) {
+			captionObserver.disconnect();
+			captionObserver = null;
+		}
+	}
+
 	function broadcastUpdate(isMeetingOver = false): void {
-		chrome.runtime
-			.sendMessage({
-				action: "live_caption_update",
-				meetingId,
-				title: getMeetingTitle(),
-				captions: transcriptArray,
-				attendeeReport: getAttendeeReport(),
-				isMeetingOver,
-			})
-			.catch(() => {
-				// Viewer might not be open
-			});
+		if (!isExtensionValid()) {
+			cleanupOrphanedScript();
+			return;
+		}
+		try {
+			chrome.runtime
+				.sendMessage({
+					action: "live_caption_update",
+					meetingId,
+					title: getMeetingTitle(),
+					captions: transcriptArray,
+					attendeeReport: getAttendeeReport(),
+					isMeetingOver,
+				})
+				.catch(() => {
+					// Viewer might not be open or extension context invalidated
+				});
+		} catch {
+			cleanupOrphanedScript();
+		}
 	}
 
 	function flushToBackground(finalize = false): void {
 		if (transcriptArray.length === 0 && allAttendeesSet.size === 0) return;
 		if (!finalize && !isMeetingActive) return;
 
+		if (!isExtensionValid()) {
+			cleanupOrphanedScript();
+			return;
+		}
+
 		if (finalize) {
 			isMeetingActive = false;
 			isFinalized = true;
 		}
 
-		chrome.runtime
-			.sendMessage({
-				action: finalize ? "finalize_live_meeting" : "flush_live_captions",
-				meetingId,
-				title: getMeetingTitle(),
-				startedAt: meetingStartedAt,
-				captions: transcriptArray,
-				attendeeReport: getAttendeeReport(),
-			})
-			.catch((err) => {
-				console.debug("[Teams Caption Saver] Flush failed:", err);
-			});
+		try {
+			chrome.runtime
+				.sendMessage({
+					action: finalize ? "finalize_live_meeting" : "flush_live_captions",
+					meetingId,
+					title: getMeetingTitle(),
+					startedAt: meetingStartedAt,
+					captions: transcriptArray,
+					attendeeReport: getAttendeeReport(),
+				})
+				.catch(() => {
+					// Background worker might be inactive or context invalidated
+				});
+		} catch {
+			cleanupOrphanedScript();
+		}
 
 		broadcastUpdate(finalize);
 	}
@@ -479,14 +518,26 @@ import type {
 		isCapturing = true;
 
 		// Check settings for auto-enable
-		chrome.storage.sync.get({ autoEnableCaptions: true }, (items) => {
-			if (items.autoEnableCaptions) {
-				setTimeout(tryAutoEnableCaptions, 1500);
+		if (isExtensionValid()) {
+			try {
+				chrome.storage.sync.get({ autoEnableCaptions: true }, (items) => {
+					if (items.autoEnableCaptions) {
+						setTimeout(tryAutoEnableCaptions, 1500);
+					}
+				});
+			} catch {
+				cleanupOrphanedScript();
+				return;
 			}
-		});
+		}
 
 		// Top-level observer only monitors structural additions/removals (no characterData storm)
 		const structureObserver = new MutationObserver(() => {
+			if (!isExtensionValid()) {
+				structureObserver.disconnect();
+				cleanupOrphanedScript();
+				return;
+			}
 			syncCaptionObserver();
 		});
 
@@ -496,19 +547,49 @@ import type {
 		});
 
 		// Consolidated polling loops
-		setInterval(parseCaptions, 600);
-		setInterval(updateAttendees, TIMING.ATTENDEE_INTERVAL);
-		setInterval(() => {
-			if (
-				isUserInMeeting() &&
-				isMeetingActive &&
-				!isFinalized &&
-				transcriptArray.length > 0
-			) {
-				flushToBackground(false);
-			}
-		}, TIMING.FLUSH_INTERVAL);
-		setInterval(checkMeetingActive, 1000);
+		activeIntervals.push(
+			setInterval(() => {
+				if (!isExtensionValid()) {
+					cleanupOrphanedScript();
+					return;
+				}
+				parseCaptions();
+			}, 600),
+		);
+		activeIntervals.push(
+			setInterval(() => {
+				if (!isExtensionValid()) {
+					cleanupOrphanedScript();
+					return;
+				}
+				updateAttendees();
+			}, TIMING.ATTENDEE_INTERVAL),
+		);
+		activeIntervals.push(
+			setInterval(() => {
+				if (!isExtensionValid()) {
+					cleanupOrphanedScript();
+					return;
+				}
+				if (
+					isUserInMeeting() &&
+					isMeetingActive &&
+					!isFinalized &&
+					transcriptArray.length > 0
+				) {
+					flushToBackground(false);
+				}
+			}, TIMING.FLUSH_INTERVAL),
+		);
+		activeIntervals.push(
+			setInterval(() => {
+				if (!isExtensionValid()) {
+					cleanupOrphanedScript();
+					return;
+				}
+				checkMeetingActive();
+			}, 1000),
+		);
 
 		// Initial check
 		setTimeout(updateAttendees, 2000);
