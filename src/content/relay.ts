@@ -20,19 +20,20 @@
 				url: string;
 				webvtt: string;
 			};
-			chrome.runtime
-				.sendMessage({
-					action: "recording_transcript_found",
-					title,
-					url,
-					webvtt,
-				})
-				.catch((err) => {
-					console.debug(
-						"[Teams Caption Saver Relay] Could not send to background:",
-						err,
-					);
-				});
+			try {
+				if (chrome?.runtime?.id) {
+					chrome.runtime
+						.sendMessage({
+							action: "recording_transcript_found",
+							title,
+							url,
+							webvtt,
+						})
+						.catch(() => {});
+				}
+			} catch {
+				// Extension context invalidated
+			}
 		}
 	});
 })();

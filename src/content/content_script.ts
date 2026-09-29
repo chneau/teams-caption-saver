@@ -597,12 +597,17 @@ import type {
 
 		// Listen for meeting end
 		window.addEventListener("beforeunload", () => {
+			if (!isExtensionValid()) return;
 			if (isMeetingActive && !isFinalized && transcriptArray.length > 0) {
 				flushToBackground(true);
 			}
 		});
 
 		document.addEventListener("click", (e) => {
+			if (!isExtensionValid()) {
+				cleanupOrphanedScript();
+				return;
+			}
 			const target = e.target as HTMLElement | null;
 			if (target?.closest(SELECTORS.LEAVE_BUTTONS)) {
 				if (isMeetingActive && !isFinalized && transcriptArray.length > 0) {

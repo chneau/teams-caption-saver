@@ -121,6 +121,15 @@ async function build() {
 			"   👉 ZIP: dist/teams-caption-saver-firefox.zip (Firefox / AMO)",
 		);
 	}
+
+	// 5. Automatically deploy build to Windows folder if path exists
+	const winDeployPath = "/mnt/c/Users/c/Documents/teams-caption-saver (1)";
+	try {
+		await cp(DIST, winDeployPath, { recursive: true });
+		console.log(`🚀 Automatically deployed build to: ${winDeployPath}`);
+	} catch {
+		// Non-WSL or destination directory not available
+	}
 }
 
 build().catch((err) => {
