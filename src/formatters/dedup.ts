@@ -27,7 +27,19 @@ export function isRefinement(previous: string, next: string): boolean {
 	if (a === "" || b === "") return a === b;
 	if (a === b || b.startsWith(a) || a.startsWith(b)) return true;
 	const shared = sharedPrefixLength(a, b);
-	return shared / Math.min(a.length, b.length) >= REFINEMENT_PREFIX_RATIO;
+	const minLen = Math.min(a.length, b.length);
+	return shared / minLen >= REFINEMENT_PREFIX_RATIO;
+}
+
+export function areLinesSimilar(a: string, b: string): boolean {
+	const ca = comparableText(a);
+	const cb = comparableText(b);
+	if (ca === "" || cb === "") return ca === cb;
+	if (ca === cb || cb.startsWith(ca) || ca.startsWith(cb)) return true;
+	if (cb.includes(ca) || ca.includes(cb)) return true;
+	const shared = sharedPrefixLength(ca, cb);
+	const minLen = Math.min(ca.length, cb.length);
+	return shared / minLen >= 0.6;
 }
 
 export interface RawDomLine {
@@ -72,38 +84,63 @@ export function reconcileSnapshots(
 			domLine.speaker === "Unknown user";
 
 		if (!isSameSpeaker) return false;
-		if (entry.Text === domLine.text) return true;
-		return isRefinement(entry.Text, domLine.text);
+		return areLinesSimilar(entry.Text, domLine.text);
 	}
 
-	let bestK = -1;
-	const searchStart = Math.max(0, existing.length - 10);
+	// Search backwards across up to the last 150 entries
+	const searchWindow = Math.min(existing.length, 150);
+	const searchStart = existing.length - searchWindow;
 
-	for (let k = existing.length - 1; k >= searchStart; k--) {
-		const candidate = existing[k];
-		const domFirst = cleaned[0];
-		if (candidate && domFirst && isMatch(candidate, domFirst)) {
-			bestK = k;
-			break;
+	let bestK = -1;
+	let bestScore = 0;
+
+	for (let offset = -cleaned.length + 1; offset < searchWindow; offset++) {
+		const k = searchStart + offset;
+		let score = 0;
+		let totalTested = 0;
+
+		for (let j = 0; j < cleaned.length; j++) {
+			const targetIdx = k + j;
+			if (targetIdx >= 0 && targetIdx < existing.length) {
+				totalTested++;
+				const entry = existing[targetIdx];
+				const domItem = cleaned[j];
+				if (entry && domItem && isMatch(entry, domItem)) {
+					score += 2;
+					// Extra weight for exact match
+					if (entry.Text === domItem.text) score += 1;
+				}
+			}
+		}
+
+		if (totalTested > 0 && score > 0) {
+			// Prefer alignments that match more lines or are closer to the end
+			const recencyBonus = (k - searchStart) / searchWindow;
+			const totalScore = score + recencyBonus;
+			if (totalScore > bestScore && score >= 2) {
+				bestScore = totalScore;
+				bestK = k;
+			}
 		}
 	}
 
+	let changed = false;
+
+	// Fallback: If bestK not found through multi-line scoring, try direct single-item match from last element
 	if (bestK === -1) {
-		for (let i = 1; i < cleaned.length; i++) {
-			const domItem = cleaned[i];
+		for (let j = cleaned.length - 1; j >= 0; j--) {
+			const domItem = cleaned[j];
 			if (!domItem) continue;
 			for (let k = existing.length - 1; k >= searchStart; k--) {
 				const candidate = existing[k];
 				if (candidate && isMatch(candidate, domItem)) {
-					bestK = k - i;
+					bestK = k - j;
 					break;
 				}
 			}
 			if (bestK !== -1) break;
 		}
 	}
-
-	let changed = false;
 
 	if (bestK === -1) {
 		for (const line of cleaned) {
@@ -133,7 +170,7 @@ export function reconcileSnapshots(
 			if (entry.Text !== domLine.text || entry.Name !== domLine.speaker) {
 				if (
 					domLine.text.length >= entry.Text.length ||
-					isRefinement(entry.Text, domLine.text)
+					areLinesSimilar(entry.Text, domLine.text)
 				) {
 					entry.Text = domLine.text;
 					changed = true;

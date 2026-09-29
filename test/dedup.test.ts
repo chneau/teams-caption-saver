@@ -132,6 +132,57 @@ describe("reconcileSnapshots", () => {
 			"Your message will then be played back to you.",
 		);
 	});
+
+	it("handles multi-line rolling DOM snapshots without repeating previous lines", () => {
+		const existing: CaptionEntry[] = [
+			{ Name: "Charles Neau", Text: "Zero.", Time: "10:01:44" },
+			{ Name: "James Mullineaux", Text: "Right.", Time: "10:01:45" },
+			{ Name: "Charles Neau", Text: "You're not.", Time: "10:01:46" },
+			{ Name: "Charles Neau", Text: "Better are you.", Time: "10:01:46" },
+			{
+				Name: "James Mullineaux",
+				Text: "Yeah, not too bad.",
+				Time: "10:01:47",
+			},
+			{
+				Name: "James Mullineaux",
+				Text: "Not too bad on I'm somehow I think I'll get my degree in data science at the moment.",
+				Time: "10:01:50",
+			},
+			{ Name: "Charles Neau", Text: "That's good.", Time: "10:01:56" },
+			{
+				Name: "James Mullineaux",
+				Text: "Got John's asking me for data and stuff and it's.",
+				Time: "10:01:59",
+			},
+		];
+
+		// Next DOM snapshot contains overlapping lines and 1 new line
+		const domSnapshot: RawDomLine[] = [
+			{ Name: "Charles Neau", speaker: "Charles Neau", text: "That's good." },
+			{
+				Name: "James Mullineaux",
+				speaker: "James Mullineaux",
+				text: "Got John's asking me for data and stuff and it's.",
+			},
+			{
+				Name: "James Mullineaux",
+				speaker: "James Mullineaux",
+				text: "Oh, you've. You've gone black. Hang on.",
+			},
+		];
+
+		const changed = reconcileSnapshots(existing, domSnapshot, "10:02:11");
+		expect(changed).toBe(true);
+		// Should only have added the 1 new line, making length 9 (not 11)
+		expect(existing.length).toBe(9);
+		expect(existing[8]?.Text).toBe("Oh, you've. You've gone black. Hang on.");
+
+		// Next snapshot identical (no new utterances)
+		const changedAgain = reconcileSnapshots(existing, domSnapshot, "10:02:12");
+		expect(changedAgain).toBe(false);
+		expect(existing.length).toBe(9);
+	});
 });
 
 describe("Alias application", () => {
